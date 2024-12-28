@@ -3,6 +3,5 @@ data/
 gguf/*
 lora_fused_model/
 Phi*/
-modelfile*
 Modelfile*
 *.json

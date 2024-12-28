@@ -1,17 +1,19 @@
 #!/bin/bash
 set -e
 
-MLX_PATH="/Users/labess40/dev/mlx-examples/llms/mlx_lm"
-LLAMA_CPP_PATH="/Users/labess40/dev/llama.cpp"
-MODEL_NAME="Phi-3-mini-4k-instruct"
-DATA_PATH="/Users/labess40/dev/mlx-examples/lora/data"
-LORA_FUSE_MODEL_PATH="/Users/labess40/dev/phi-fine-tunning/lora_fused_model"
-GGUF_PATH="/Users/labess40/dev/phi-fine-tunning/gguf"
-GGUF_MODEL="Phi-3-mini-4k-instruct_nutrition.gguf"
-ITERS=50
+# You need to clone https://github.com/ml-explore/mlx-examples/tree/main repo
+# You need to clone https://github.com/ggerganov/llama.cpp.git repo
+MLX_PATH= # Path to mlx-examples/llms/mlx_lm
+LLAMA_CPP_PATH= # Path to llama.cpp
+MODEL_NAME= # Model you want to train locally
+DATA_PATH= # Path to your data folder (need to have train.jsonl, valid.jsonl, test.jsonl inside)
+LORA_FUSE_MODEL_PATH= # Path to save the fused model
+GGUF_PATH= # Path to save the GGUF model
+GGUF_MODEL= # Name of the GGUF model
+ITERS= # Number of iterations for training
 
-MODELFILE_PATH="/Users/labess40/dev/phi-fine-tunning/Modelfile"
-OLLAMA_MODEL_NAME="phi-nutrition"
+MODELFILE_PATH= # Path to the modelfile used to create the model in Ollama
+OLLAMA_MODEL_NAME= # Name of the model in Ollama
 
 export PYTHONPATH="$(dirname "$MLX_PATH"):$PYTHONPATH"
 

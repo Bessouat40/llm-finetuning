@@ -1,0 +1,4 @@
+FROM 
+PARAMETER num_ctx 4096
+PARAMETER temperature 0.7
+SYSTEM "<Your system prompt>"

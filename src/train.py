@@ -5,13 +5,11 @@ from peft import LoraConfig
 from trl import SFTTrainer
 import json
 
-# Détecter si MPS est disponible sur Mac M1
 device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
 torch.backends.mps.allow_tf32 = False
 
 model_name = "microsoft/Phi-3.5-mini-instruct"
 
-# Chargement du dataset JSON
 dataset = load_dataset("json", data_files="./data/trainData_HuggingFace.json")["train"]
 
 def preprocess_function(examples):
@@ -30,7 +28,6 @@ def preprocess_function(examples):
 processed_data = preprocess_function(dataset)
 processed_dataset = Dataset.from_list(processed_data)
 
-# Add data validation
 print("Total dataset size:", len(dataset))
 for data in processed_data[:3]:
     print('data : ', data)
@@ -41,9 +38,8 @@ with open(output_file, "w", encoding="utf-8") as f:
 
 print(f"Data saved to {output_file}")
 
-# Charger le tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
-tokenizer.pad_token = tokenizer.eos_token  # S'assurer d'avoir un token de padding
+tokenizer.pad_token = tokenizer.eos_token
 
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
@@ -52,7 +48,6 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map=None
 ).to(device)
 
-# Configuration LoRA
 lora_config = LoraConfig(
     r=8,
     lora_alpha=16,
@@ -68,15 +63,15 @@ for name, param in model.named_parameters():
 
 training_args = TrainingArguments(
     output_dir="outputs",
-    bf16=True,  # Adjust based on your hardware
-    fp16=False,   # Enable for MPS
-    per_device_train_batch_size=2,  # Increase if possible
+    bf16=True,
+    fp16=False, 
+    per_device_train_batch_size=2,
     gradient_accumulation_steps=2,
-    num_train_epochs=1,  # Try more epochs
+    num_train_epochs=1,
     max_steps=-1,
     optim="adamw_torch",
     lr_scheduler_type="linear",
-    learning_rate=1e-5,  # Increased learning rate
+    learning_rate=1e-5,
     logging_steps=10,
     save_steps=100,
     report_to="none",
@@ -86,7 +81,6 @@ training_args = TrainingArguments(
     warmup_ratio=0.1,
 )
 
-# Création du trainer SFT
 trainer = SFTTrainer(
     model=model,
     args=training_args,
@@ -98,17 +92,13 @@ trainer = SFTTrainer(
     packing=False
 )
 
-# Before training
 print("Initial Model State:")
 for name, param in model.named_parameters():
     if param.requires_grad:
         print(f"{name}: mean={param.data.mean().item()}, std={param.data.std().item()}")
 
-# Lancement de l'entraînement
 with torch.autograd.detect_anomaly():
     trainer.train()
-# trainer.train()
 
-# Sauvegarde du modèle LoRA et du tokenizer
 trainer.save_model("lora_model")
 tokenizer.save_pretrained("lora_model")
