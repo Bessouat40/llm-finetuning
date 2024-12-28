@@ -18,9 +18,9 @@ This repository provides a script to **streamline the process** of fine-tuning a
 3. Customize the **system prompt** for your Ollama model in the `Modelfile` file to adjust its behavior.
 4. Run the script to **train the model**, **convert it to GGUF format**, and **load it into Ollama**:
 
-   ```bash
-   sh mlx_pipeline.sh
-   ```
+```bash
+sh mlx_pipeline.sh
+```
 
 ---
 
