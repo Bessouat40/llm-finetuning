@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# You need to clone https://github.com/ml-explore/mlx-examples/tree/main repo
+# You need to clone https://github.com/ml-explore/mlx-examples.git repo
 # You need to clone https://github.com/ggerganov/llama.cpp.git repo
 MLX_PATH= # Path to mlx-examples/llms/mlx_lm
 LLAMA_CPP_PATH= # Path to llama.cpp
